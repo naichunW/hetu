@@ -471,8 +471,10 @@ public class ConnectorManager
     private static void registerExternalFunctions(Optional<ExternalFunctionHub> externalFunctionHub, FunctionAndTypeManager functionAndTypeManager)
     {
         if (externalFunctionHub.isPresent()) {
+            log.info("Register external functions for %s", externalFunctionHub.get().getClass().getSimpleName());
             Set<SqlInvokedFunction> sqlInvokedFunctions = extractExternalFunctions(externalFunctionHub.get());
             for (SqlInvokedFunction sqlInvokedFunction : sqlInvokedFunctions) {
+                log.info("Register external functions %s",sqlInvokedFunction.getSignature().toString());
                 functionAndTypeManager.createFunction(sqlInvokedFunction, true);
             }
         }

@@ -16,6 +16,7 @@ package io.prestosql.metadata;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
+import io.airlift.log.Logger;
 import io.prestosql.spi.PrestoException;
 import io.prestosql.spi.connector.QualifiedObjectName;
 import io.prestosql.spi.function.BuiltInFunctionHandle;
@@ -56,6 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class FunctionResolver
 {
     private final FunctionAndTypeManager functionAndTypeManager;
+    private static final Logger LOG = Logger.get(FunctionResolver.class);
 
     public FunctionResolver(FunctionAndTypeManager functionAndTypeManager)
     {
@@ -95,7 +97,7 @@ public final class FunctionResolver
 
             return new BuiltInFunctionHandle(getMagicLiteralFunctionSignature(type));
         }
-
+        LOG.error("resolveFunction not resolve");
         throw new PrestoException(FUNCTION_NOT_FOUND, constructFunctionNotFoundErrorMessage(functionName, parameterTypes, candidates));
     }
 
@@ -123,7 +125,7 @@ public final class FunctionResolver
         if (match.isPresent()) {
             return functionNamespaceManager.getFunctionHandle(transactionHandle, match.get());
         }
-
+        LOG.error("lookupFunction not match");
         throw new PrestoException(FUNCTION_NOT_FOUND, constructFunctionNotFoundErrorMessage(functionName, parameterTypes, candidates));
     }
 

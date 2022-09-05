@@ -15,12 +15,14 @@ package io.prestosql.metadata;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Joiner;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.UncheckedExecutionException;
+import io.airlift.log.Logger;
 import io.prestosql.Session;
 import io.prestosql.metastore.HetuMetaStoreManager;
 import io.prestosql.operator.aggregation.InternalAggregationFunction;
@@ -128,6 +130,7 @@ public class FunctionAndTypeManager
     private final CacheStatsMBean cacheStatsMBean;
     private final ConcurrentMap<String, BlockEncoding> blockEncodings = new ConcurrentHashMap<>();
     private final Kryo kryo;
+    private final static Logger LOG = Logger.get(FunctionAndTypeManager.class);
 
     @Inject
     public FunctionAndTypeManager(
@@ -223,6 +226,7 @@ public class FunctionAndTypeManager
         if (functionNamespaceManagers.putIfAbsent(catalogName, functionNamespaceManager) != null) {
             throw new IllegalArgumentException(format("Function namespace manager is already registered for catalog [%s]", catalogName));
         }
+        LOG.info("Total %s function namespace: %s ",functionNamespaceManagers.keySet().size(),Joiner.on(",").join(functionNamespaceManagers.keySet()));
     }
 
     @VisibleForTesting
@@ -361,6 +365,7 @@ public class FunctionAndTypeManager
      */
     public FunctionHandle resolveFunction(Optional<TransactionId> transactionId, QualifiedObjectName functionName, List<TypeSignatureProvider> parameterTypes)
     {
+        LOG.info("function handle %s %s %s",functionName.getCatalogName(),functionName.getObjectName(),functionName.getSchemaName());
         if (functionName.getCatalogSchemaName().equals(DEFAULT_NAMESPACE) && parameterTypes.stream().noneMatch(TypeSignatureProvider::hasDependency)) {
             return lookupCachedFunction(functionName, parameterTypes);
         }
@@ -539,6 +544,7 @@ public class FunctionAndTypeManager
     {
         FunctionNamespaceManager<?> functionNamespaceManager = getServingFunctionNamespaceManager(functionName.getCatalogSchemaName()).orElse(null);
         if (functionNamespaceManager == null) {
+            LOG.error("functionNamespaceManager is null");
             throw new PrestoException(FUNCTION_NOT_FOUND, constructFunctionNotFoundErrorMessage(functionName, parameterTypes, ImmutableList.of()));
         }
 
