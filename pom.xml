@@ -157,6 +157,7 @@
         <module>hetu-greenplum</module>
         <module>hetu-clickhouse</module>
         <module>hetu-kylin</module>
+        <module>hetu-shentong</module>
     </modules>
 
     <dependencyManagement>
@@ -1701,23 +1702,23 @@
                         <threshold>Low</threshold>
                         <effort>Default</effort>
                         <findbugsXmlOutput>true</findbugsXmlOutput>
-                        <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                        <!--<findbugsXmlWithMessages>true</findbugsXmlWithMessages>-->
                         <xmlOutput>true</xmlOutput>
                         <findbugsXmlOutputDirectory>target/site</findbugsXmlOutputDirectory>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.0.0</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>8.16</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
+                <!--<plugin>-->
+                    <!--<groupId>org.apache.maven.plugins</groupId>-->
+                    <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
+                    <!--<version>3.0.0</version>-->
+                    <!--<dependencies>-->
+                        <!--<dependency>-->
+                            <!--<groupId>com.puppycrawl.tools</groupId>-->
+                            <!--<artifactId>checkstyle</artifactId>-->
+                            <!--<version>8.16</version>-->
+                        <!--</dependency>-->
+                    <!--</dependencies>-->
+                <!--</plugin>-->
                 <plugin>
                     <groupId>com.mycila</groupId>
                     <artifactId>license-maven-plugin</artifactId>
@@ -1809,11 +1810,11 @@
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.5</version>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-checkstyle-plugin</artifactId>-->
+                <!--<version>3.0.0</version>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
